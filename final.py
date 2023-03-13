@@ -52,7 +52,7 @@ class employee(BaseModel):
     name: str = Field(..., example="Manjot Singh")
     tag_id: int = Field(..., example=200)
     role_id : int = Field(..., example=2)
-class Update_Employee_Data(BaseModel):
+class Update_employee_data(BaseModel):
     name: str = Field(..., example="Enter Empname")
     tag_id: int = Field(..., example="Enter TagId")
     role_id: int = Field(..., example="Enter Role")
