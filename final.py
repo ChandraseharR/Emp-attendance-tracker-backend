@@ -421,8 +421,6 @@ async def get_employee_by_id(EmpId: int,date:date, floor: Union[int, None]=None)
     else:
          cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={EmpId} and DATE("in_time")=\'{date}\'')
     data1=cur.fetchall()
-    whrs=datetime(1, 1, 1, 0, 0)
-    # wsum=0
     ans=[]
     for row in data1:
         whrs=datetime(1, 1, 1, 0, 0)
