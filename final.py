@@ -52,7 +52,7 @@ class employee(BaseModel):
     name: str = Field(..., example="Manjot Singh")
     tag_id: int = Field(..., example=200)
     role_id : int = Field(..., example=2)
-class update_Employee_Data(BaseModel):
+class Update_employee_data(BaseModel):
     name: str = Field(..., example="Enter Empname")
     tag_id: int = Field(..., example="Enter TagId")
     role_id: int = Field(..., example="Enter Role")
@@ -254,7 +254,6 @@ async def get_employee_by_id(EmpId: int,m:int,y:int):
     data=pd.DataFrame(cur.fetchall(),columns=['date'])
     str2=""
     leap = 0
-    d=0
     if y% 400 == 0:
         leap = 1
     elif y % 100 == 0:
@@ -267,18 +266,15 @@ async def get_employee_by_id(EmpId: int,m:int,y:int):
         y=str(y)
         m=str(m)
         str2+=y+"-"+m+"-"+s1
-        d=s1
     lst = [1,3,5,7,8,10,12]
     if m in lst:
         y=str(y)
         m=str(m)
         str2+=y+"-"+m+"-"+"31"
-        d=31
     else:
         y=str(y)
         m=str(m)
         str2+= y+"-"+m+"-"+"30"
-        d=30
     str1= y+"-"+m+"-"+"01"      
     data['date'] = pd.to_datetime(data['date'])
     my_range= pd.date_range(start=str(str1), end=str(str2), freq='B')
@@ -297,7 +293,7 @@ async def get_employee_by_id(EmpId: int,y:int):
     data=pd.DataFrame(cur.fetchall(),columns=['date'])
     today = datetime.now()
     ans=[]
-    list = [1,3,5,7,8,10,12]
+    lst = [1,3,5,7,8,10,12]
     leap = 0
     d=0
     if y% 400 == 0:
@@ -313,24 +309,24 @@ async def get_employee_by_id(EmpId: int,y:int):
             m=str(m)
             s2=str(s1)
             str2=y+"-"+m+"-"+s2
-            d=s1
+   
         elif m==today.month: 
             y=str(y)
             m=str(m)
             dd=str(today.day)
             str2=y+"-"+m+"-"+dd
-            d=int(dd)
+  
 
-        elif m in list:
+        elif m in lst:
             y=str(y)
             m=str(m)
             str2=y+"-"+m+"-"+"31"
-            d=31   
+   
         else:
             y=str(y)
             m=str(m)
             str2= y+"-"+m+"-"+"30"
-            d=30
+
         str1= y+"-"+m+"-"+"01"      
         data['date'] = pd.to_datetime(data['date'])
         my_range= pd.date_range(start=str(str1), end=str(str2), freq='B')
@@ -394,7 +390,6 @@ async def get_employee_by_id(EmpId: int,date:date):
     cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={EmpId} and DATE("in_time")=\'{date}\'')
     data1=cur.fetchall()
     whrs=datetime(1, 1, 1, 0, 0)
-    # wsum=0
     temp=[]
     count=int(1)
     for row in data1:
