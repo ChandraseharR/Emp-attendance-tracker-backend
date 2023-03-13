@@ -69,7 +69,7 @@ async def all_employees():
     return get_data_as_json(cur.fetchall())
 
 @app.get('/getEmployeeByID', response_model = List[employee])
-async def get_employee_by_id(empId: int):
+async def get_employee_by_id(empid: int):
     cur.execute(f'SELECT * FROM "{table_name1}" where "emp_id"={empId}')
     return get_data_as_json(cur.fetchall())
 
@@ -80,21 +80,21 @@ async def register_employee(employee : employee):
 
     conn.commit()
 
-    return await get_employee_by_id(employee.EmpId)
+    return await get_employee_by_id(employee.empid)
     
 @app.put('/updaterEmployeeData', response_model = List[employee])
-async def update_employee_data(empId: int, data_changed : Update_Employee_Data):
+async def update_employee_data(empid: int, data_changed : Update_Employee_Data):
     cur.execute(f'UPDATE "{table_name1}" SET "name" = %s, "tag_id" = %s, "role_id" = %s WHERE "emp_id" = %s', 
-    (data_changed.name, data_changed.tag_id, data_changed.role_id, empId))
+    (data_changed.name, data_changed.tag_id, data_changed.role_id, empid))
 
     conn.commit()
-    return await get_employee_by_id(empId)
+    return await get_employee_by_id(empid)
 
-@app.delete('/employeeDelete/{empId}')
-def delete_employee(EmpId: int):
-    cur.execute(f'DELETE FROM "{table_name1}" WHERE "emp_id" = %s', (empId,))
+@app.delete('/employeeDelete/{empid}')
+def delete_employee(empid: int):
+    cur.execute(f'DELETE FROM "{table_name1}" WHERE "emp_id" = %s', (empid,))
     conn.commit()
-    return "Employee with " + str(empId) + " is deleted"    
+    return "Employee with " + str(empid) + " is deleted"    
 
 
 table_name2="login_credentials"
@@ -132,8 +132,8 @@ def get_data_as_json3(lt):
 
 
 @app.get('/getAnalyticsByID')
-async def get_employee_by_id(empId: int):
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and "id"!=4')
+async def get_employee_by_id(empid: int):
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and "id"!=4')
     data1=cur.fetchall()
     wdict={}
     wdict_time={}
@@ -149,7 +149,7 @@ async def get_employee_by_id(empId: int):
                 wdict[row[0].date()]+=(row[1]-row[0])
                 wdict_time[row[0].date()]+=(row[1]-row[0]).total_seconds()
     print(wdict_time)
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and "id"=4')
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and "id"=4')
     data1=cur.fetchall()
     ldict={}
     ldict_time={}
@@ -176,8 +176,8 @@ async def get_employee_by_id(empId: int):
     return ans
     
 @app.get('/getLatestAnalyticsByID')
-async def get_employee_by_id(empId: int):
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and "id"!=4')
+async def get_employee_by_id(empid: int):
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and "id"!=4')
     data1=cur.fetchall()
     wdict={}
     wdict_time={}
@@ -193,7 +193,7 @@ async def get_employee_by_id(empId: int):
                 wdict[row[0].date()]+=(row[1]-row[0])
                 wdict_time[row[0].date()]+=(row[1]-row[0]).total_seconds()
     print(wdict_time)
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and "id"=4')
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and "id"=4')
     data1=cur.fetchall()
     ldict={}
     ldict_time={}
@@ -225,8 +225,8 @@ async def get_employee_by_id(empId: int):
     return ans[-1]   
 
 @app.get('/getAnalyticsByIDandDate')
-async def get_employee_by_id(empId: int, date:date):
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{date}\' and "id"!=4')
+async def get_employee_by_id(empid: int, date:date):
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{date}\' and "id"!=4')
     data1=cur.fetchall()
     wsum=datetime(1, 1, 1, 0, 0)
     wsum_time = 0
@@ -236,7 +236,7 @@ async def get_employee_by_id(empId: int, date:date):
 
     print(f'wsum = {wsum}')
     print(wsum.time())
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{date}\' and "id"=4')
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{date}\' and "id"=4')
     data2=cur.fetchall()
     lsum=datetime(1, 1, 1, 0, 0)
     lsum_time = 0
@@ -249,8 +249,8 @@ async def get_employee_by_id(empId: int, date:date):
     return temp
 
 @app.get('/getAttendaceByID')
-async def get_employee_by_id(empId: int,m:int,y:int):
-    cur.execute(f'SELECT DISTINCT DATE("in_time") FROM "{table_name3}" natural join "employee" where "emp_id"={empId}')
+async def get_employee_by_id(empid: int,m:int,y:int):
+    cur.execute(f'SELECT DISTINCT DATE("in_time") FROM "{table_name3}" natural join "employee" where "emp_id"={empid}')
     data=pd.DataFrame(cur.fetchall(),columns=['date'])
     str2=""
     leap = 0
@@ -288,8 +288,8 @@ async def get_employee_by_id(empId: int,m:int,y:int):
     return temp
 
 @app.get('/getYearlyAttendaceByID')
-async def get_employee_by_id(empId: int,y:int):
-    cur.execute(f'SELECT DISTINCT DATE("in_time") FROM "{table_name3}" natural join "employee" where "emp_id"={empId}')
+async def get_employee_by_id(empid: int,y:int):
+    cur.execute(f'SELECT DISTINCT DATE("in_time") FROM "{table_name3}" natural join "employee" where "emp_id"={empid}')
     data=pd.DataFrame(cur.fetchall(),columns=['date'])
     today = datetime.now()
     ans=[]
@@ -341,7 +341,7 @@ async def get_employee_by_id(empId: int,y:int):
     return ans
 
 @app.get('/getWeeklyData')
-async def get_weekly_data(empId:int):
+async def get_weekly_data(empid:int):
     t0=date.today()
     t0=str(t0)
     print(t0)
@@ -349,19 +349,19 @@ async def get_weekly_data(empId:int):
     df = pd.DataFrame.from_dict(dict)  
     df['Date'] = pd.to_datetime(df['Date'], errors ='coerce')
     df.astype('int64').dtypes  
-    weekNumber = df['Date'].dt.week
-    print(weekNumber)
-    def getDateRangeFromWeek(p_year,p_week):
+    week_number = df['Date'].dt.week
+    print(week_number)
+    def get_date_range_from_week(p_year,p_week):
         firstdayofweek = datetime.strptime(f'{p_year}-W{int(p_week )- 1}-1', "%Y-W%W-%w").date()
         lastdayofweek = firstdayofweek + timedelta(days=5)
         return firstdayofweek, lastdayofweek
-    firstdate, lastdate =  getDateRangeFromWeek('2022',weekNumber)
+    firstdate, lastdate =  get_date_range_from_week('2022',week_number)
     st=firstdate
     delta=timedelta(days=1)
     ans=[]
     for i in range(1,6):
         print(st)
-        cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{st}\' and "id"!=4')
+        cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{st}\' and "id"!=4')
         data1=cur.fetchall()
         wsum=datetime(1, 1, 1, 0, 0)
         wsum_time = 0
@@ -370,7 +370,7 @@ async def get_weekly_data(empId:int):
             wsum_time+=(row[1] - row[0]).total_seconds()
         print(f'wsum = {wsum}')
         print(wsum.time())
-        cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{st}\' and "id"=4')
+        cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{st}\' and "id"=4')
         data2=cur.fetchall()
         lsum=datetime(1, 1, 1, 0, 0)
         lsum_time = 0
@@ -386,8 +386,8 @@ async def get_weekly_data(empId:int):
 
 
 @app.get('/getAnalyticsByFloor')
-async def get_employee_by_id(empId: int,date:date):
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{date}\'')
+async def get_employee_by_id(empid: int,date:date):
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{date}\'')
     data1=cur.fetchall()
     whrs=datetime(1, 1, 1, 0, 0)
     temp=[]
@@ -402,11 +402,11 @@ async def get_employee_by_id(empId: int,date:date):
         count+=1
     return temp
 @app.get('/getAllAnalyticsByFloor')
-async def get_employee_by_id(empId: int,date:date, floor: Union[int, None]=None):
+async def get_employee_by_id(empid: int,date:date, floor: Union[int, None]=None):
     if floor:
-         cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{date}\' and "id"={floor}')
+         cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{date}\' and "id"={floor}')
     else:
-         cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{date}\'')
+         cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{date}\'')
     data1=cur.fetchall()
     ans=[]
     for row in data1:
@@ -425,7 +425,7 @@ async def get_employee_by_id(empId: int,date:date, floor: Union[int, None]=None)
     return ans
       
 @app.get('/getAnalyticsByID2')
-async def get_employee_by_id(empId: int):
+async def get_employee_by_id(empid: int):
     test_date=date.today()
     diff = 1
     if test_date.weekday() == 0:
@@ -436,7 +436,7 @@ async def get_employee_by_id(empId: int):
         diff = 1
     tdate = test_date - timedelta(days=diff)
     print(tdate)
-    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empId} and DATE("in_time")=\'{tdate}\' and "id"!=4')
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={empid} and DATE("in_time")=\'{tdate}\' and "id"!=4')
     data1=cur.fetchall()
     wsum=datetime(1, 1, 1, 0, 0)
     wsum_time = 0
