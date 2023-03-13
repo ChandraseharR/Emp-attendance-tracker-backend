@@ -30,7 +30,7 @@ async def startup():
     conn = psycopg2.connect(
         database="postgres", # database name
         user = "postgres", # user name
-        password = "c#@ndru 12", #password
+        password =  #password
         host = "localhost", # host
         port = "5432" # port number enabled by you
     )
