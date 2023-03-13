@@ -100,7 +100,7 @@ def delete_employee(EmpId: int):
 
 
 
-
+    
 # table_name="EmployeeDetails"
 # class EmployeeDetails(BaseModel):
 #     EmpId:int = Field(..., example=1001)
