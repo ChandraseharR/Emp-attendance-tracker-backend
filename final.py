@@ -268,8 +268,8 @@ async def get_employee_by_id(EmpId: int,m:int,y:int):
         m=str(m)
         str2+=y+"-"+m+"-"+s1
         d=s1
-    list = [1,3,5,7,8,10,12]
-    if m in list:
+    lst = [1,3,5,7,8,10,12]
+    if m in lst:
         y=str(y)
         m=str(m)
         str2+=y+"-"+m+"-"+"31"
@@ -283,7 +283,6 @@ async def get_employee_by_id(EmpId: int,m:int,y:int):
     data['date'] = pd.to_datetime(data['date'])
     my_range= pd.date_range(start=str(str1), end=str(str2), freq='B')
     absent=len(my_range.difference(data['date']))
-    # days = np.busday_count(str(str1),str(str2) )
     days = len(pd.bdate_range(str(str1),str(str2))) 
     m=str(m)
     datetime_object = datetime.strptime(m, "%m")
@@ -336,7 +335,6 @@ async def get_employee_by_id(EmpId: int,y:int):
         data['date'] = pd.to_datetime(data['date'])
         my_range= pd.date_range(start=str(str1), end=str(str2), freq='B')
         absent=len(my_range.difference(data['date']))
-        # days = np.busday_count(str(str1),str(str2) )
         days = len(pd.bdate_range(str(str1),str(str2))) 
         m=str(m)
         datetime_object = datetime.strptime(m, "%m")
@@ -351,21 +349,16 @@ async def get_weekly_data(EmpId:int):
     t0=date.today()
     t0=str(t0)
     print(t0)
-         # dict = {'Date':["2022-10-10"]}
     dict = {'Date':[t0]}  
-         # converting the dictionary to a dataframe
     df = pd.DataFrame.from_dict(dict)  
-        # converting the date to the required format
     df['Date'] = pd.to_datetime(df['Date'], errors ='coerce')
     df.astype('int64').dtypes  
-         # extracting the week from the date
     weekNumber = df['Date'].dt.week
     print(weekNumber)
     def getDateRangeFromWeek(p_year,p_week):
         firstdayofweek = datetime.strptime(f'{p_year}-W{int(p_week )- 1}-1', "%Y-W%W-%w").date()
         lastdayofweek = firstdayofweek + timedelta(days=5)
         return firstdayofweek, lastdayofweek
-         #Call function to get dates range 
     firstdate, lastdate =  getDateRangeFromWeek('2022',weekNumber)
     st=firstdate
     delta=timedelta(days=1)
@@ -409,7 +402,6 @@ async def get_employee_by_id(EmpId: int,date:date):
         intime=row[0].time()
         outtime=row[1].time()       
         whrs+=row[1]-row[0]
-        # wsum+=(row[1]-row[0]).total_seconds()
         ans={ 'Sno':count,'Floor':row[2],'InTime' : intime , 'OutTime' : outtime , 'duration' : whrs.time()}#,duration_sec' : wsum}
         temp.append(ans) 
         count+=1
@@ -427,7 +419,6 @@ async def get_employee_by_id(EmpId: int,date:date, floor: Union[int, None]=None)
         intime=row[0].time()
         outtime=row[1].time()       
         whrs+=row[1]-row[0]
-        # wsum+=(row[1]-row[0]).total_seconds()
         print(whrs.time().hours())
         print(whrs.time().minutes())
         print(whrs.time().seconds())
