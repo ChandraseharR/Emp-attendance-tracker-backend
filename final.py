@@ -399,6 +399,7 @@ async def get_employee_by_id(EmpId: int, date:date):
 async def get_employee_by_id(EmpId: int,m:int,y:int):
     cur.execute(f'SELECT DISTINCT DATE("in_time") FROM "{table_name3}" natural join "employee" where "emp_id"={EmpId}')
     data=pd.DataFrame(cur.fetchall(),columns=['date'])
+    str2=""
     leap = 0
     d=0
     if y% 400 == 0:
@@ -412,18 +413,18 @@ async def get_employee_by_id(EmpId: int,m:int,y:int):
         s1=str(s1)
         y=str(y)
         m=str(m)
-        str2=y+"-"+m+"-"+s1
+        str2+=y+"-"+m+"-"+s1
         d=s1
     list = [1,3,5,7,8,10,12]
     if m in list:
         y=str(y)
         m=str(m)
-        str2=y+"-"+m+"-"+"31"
+        str2+=y+"-"+m+"-"+"31"
         d=31
     else:
         y=str(y)
         m=str(m)
-        str2= y+"-"+m+"-"+"30"
+        str2+= y+"-"+m+"-"+"30"
         d=30
     str1= y+"-"+m+"-"+"01"      
     data['date'] = pd.to_datetime(data['date'])
