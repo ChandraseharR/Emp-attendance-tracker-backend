@@ -92,156 +92,9 @@ async def update_employee_data(EmpId: int, data_changed : Update_Employee_Data):
 
 @app.delete('/employeeDelete/{EmpId}')
 def delete_employee(EmpId: int):
-    # data = get_employee_by_id(id)
     cur.execute(f'DELETE FROM "{table_name1}" WHERE "emp_id" = %s', (EmpId,))
     conn.commit()
     return "Employee with " + str(EmpId) + " is deleted"    
-
-
-
-
-    
-# table_name="EmployeeDetails"
-# class EmployeeDetails(BaseModel):
-#     EmpId:int = Field(..., example=1001)
-#     EmpName: str = Field(..., example="Manjot Singh")
-#     EmpPosition: str = Field(..., example="3&3e(Ul0@")
-#     TagId : int = Field(..., example=1000)
-# class Update_Employee_Data(BaseModel):
-#     EmpName: str = Field(..., example="Enter Empname")
-#     EmpPosition: str = Field(..., example="Enter Position")
-#     TagId : int = Field(..., example="Enter TagId")
-# def get_data_as_json1(lt):
-#     ans = []
-#     for row in lt:
-#         temp = { 'EmpId' : row[0], 'EmpName': row[1], 'EmpPosition': row[2], 'TagId': row[3] }
-#         ans.append(temp)
-#     return ans
-
-# @app.get('/getAllEmployees', response_model = List[EmployeeDetails])
-# async def all_employees():
-#     cur.execute(f'SELECT * FROM "{table_name}"')
-#     return get_data_as_json1(cur.fetchall())
-
-# @app.get('/getEmployeeByID', response_model = List[EmployeeDetails])
-# async def get_employee_by_id(EmpId: int):
-#     cur.execute(f'SELECT * FROM "{table_name}" where "EmpId"={EmpId}')
-#     return get_data_as_json1(cur.fetchall())
-
-# @app.post('/registerEmployee', response_model = List[EmployeeDetails])
-# async def register_employee(employee : EmployeeDetails):
-#     cur.execute(f'INSERT INTO "{table_name}"("EmpId", "EmpName", "EmpPosition", "TagId") VALUES(%s, %s, %s, %s)', 
-#     (employee.EmpId, employee.EmpName, employee.EmpPosition, employee.TagId))
-
-#     conn.commit()
-
-#     return await get_employee_by_id(employee.EmpId)
-    
-# @app.put('/updaterEmployeeData', response_model = List[EmployeeDetails])
-# async def update_employee_data(EmpId: int, data_changed : Update_Employee_Data):
-#     cur.execute(f'UPDATE "{table_name}" SET "EmpName" = %s, "EmpPosition" = %s, "TagId" = %s WHERE "EmpId" = %s', 
-#     (data_changed.EmpName, data_changed.EmpPosition, data_changed.TagId, EmpId))
-
-#     conn.commit()
-#     return await get_employee_by_id(EmpId)
-
-# @app.delete('/employeeDelete/{EmpId}')
-# def delete_employee(EmpId: int):
-#     # data = get_employee_by_id(id)
-#     cur.execute(f'DELETE FROM "{table_name}" WHERE "EmpId" = %s', (EmpId,))
-#     conn.commit()
-#     return "Employee with " + str(EmpId) + " is deleted"    
-
-
-# table_name="Leave"
-# class LeaveDetails(BaseModel):
-#     EmpId:int = Field(..., example=1001)
-#     LeaveId: int = Field(..., example=1002)
-#     DayType: int  = Field(..., example=0)
-#     DateFrom : date=Field(...,example=2002-10-10)
-#     DateTo : date =Field(...,example=2002-10-11)
-
-# class Update_leave_Data(BaseModel):
-#     EmpId:int = Field(..., example=1001)
-#     DayType: int  = Field(..., example="Enter Daytype")
-#     DateFrom : date =Field(...,example="Enter Date from")
-#     DateTo : date =Field(...,example="Enter Date to")
-
-# def get_data_as_json(lt):
-#     ans = []
-#     for row in lt:
-#         temp = { 'LeaveId' : row[0], 'EmpId': row[1], 'DayType': row[2], 'DateFrom': row[3],'DateTo': row[4] }
-#         ans.append(temp)
-#     return ans
-# app = FastAPI()
-# @app.on_event("startup")
-# async def startup():
-#     global conn
-#     conn = psycopg2.connect(
-#         database="postgres", # database name
-#         user = "postgres", # user name
-#         password = "c#@ndru 12", #password
-#         host = "localhost", # host
-#         port = "5432" # port number enabled by you
-#     )
-#     global cur
-#     cur = conn.cursor()
-#     cur.execute(f"SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{table_name}'")
-#     print(cur.fetchall())
-#     if bool(cur.rowcount) :
-#         print('Table is already exist')
-#     else:
-#         # Enter the table schema that you want to declare
-#         cur.execute(f'''CREATE TABLE {table_name}(
-#                 "LeaveId" integer NOT NULL,
-#                 "EmpId" integer NOT NULL,
-#                 "DayType" integer,
-#                 "DateFrom" date,
-#                 "DateTo" date,
-#                 CONSTRAINT "LeaveId" PRIMARY KEY ("LeaveId"),
-#                 CONSTRAINT "EmpId" FOREIGN KEY ("EmpId") REFERENCES public."EmployeeDetails" ("EmpId")
-#                 )''')
-#         conn.commit()
-#         print('created')
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await conn.commit()
-#     await conn.close()
-# @app.get('/getAllLeaves', response_model = List[LeaveDetails])
-# async def all_leaves():
-#     cur.execute(f'SELECT * FROM "{table_name}"')
-#     return get_data_as_json(cur.fetchall())
-
-# @app.get('/getLeaveByID', response_model = List[LeaveDetails])
-# async def get_leave_by_id(LeaveId: int):
-#     cur.execute(f'SELECT * FROM "{table_name}" where "LeaveId"={LeaveId}')
-#     return get_data_as_json(cur.fetchall())
-
-# @app.post('/applyLeave', response_model = List[LeaveDetails])
-# async def apply_leave(entry : LeaveDetails):
-#     cur.execute(f'INSERT INTO "{table_name}"("LeaveId", "EmpId", "DayType", "DateFrom","DateTo") VALUES(%s, %s, %s, %s, %s,)', 
-#     (entry.LeaveId, entry.EmpId, entry.DayType, entry.DateFrom, entry.DateTo))
-
-#     conn.commit()
-#     cur.execute(f'Select* from "{table_name}" where "LeaveId"={entry.LeaveId}')
-#     return get_data_as_json(cur.fetchall())
-
-# @app.put('/updaterEmployeeData', response_model = List[LeaveDetails])
-# async def update_leave_data(LeaveId: int, leave_changed : Update_leave_Data):
-#     cur.execute(f'UPDATE "{table_name}" SET "EmpId"=%s, "DayType"=%s, "DateFrom"=%s,"DateTo"=%s WHERE "LeaveId" = %s', 
-#     (leave_changed.EmpId ,leave_changed.DayType, leave_changed.DateFrom, leave_changed.DateTo, LeaveId))
-
-#     conn.commit()
-#     return await get_leave_by_id(LeaveId)
-
-# @app.delete('/employeeDelete/{LeaveId}')
-# def delete_employee(LeaveId: int):
-#     # data = get_employee_by_id(id)
-#     cur.execute(f'DELETE FROM "{table_name}" WHERE "EmpId" = %s', (LeaveId,))
-#     conn.commit()
-#     return "Employee with " + str(LeaveId) + " is deleted"   
-
-
 
 
 table_name2="login_credentials"
@@ -543,24 +396,24 @@ async def get_weekly_data(EmpId:int):
     return ans 
 
 
-# @app.get('/getAnalyticsByFloor')
-# async def get_employee_by_id(EmpId: int,date:date):
-#     cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={EmpId} and DATE("in_time")=\'{date}\'')
-#     data1=cur.fetchall()
-#     whrs=datetime(1, 1, 1, 0, 0)
-#     # wsum=0
-#     temp=[]
-#     count=int(1)
-#     for row in data1:
-#         whrs=datetime(1, 1, 1, 0, 0)
-#         intime=row[0].time()
-#         outtime=row[1].time()       
-#         whrs+=row[1]-row[0]
-#         # wsum+=(row[1]-row[0]).total_seconds()
-#         ans={ 'Sno':count,'Floor':row[2],'InTime' : intime , 'OutTime' : outtime , 'duration' : whrs.time()}#,duration_sec' : wsum}
-#         temp.append(ans) 
-#         count+=1
-#     return temp
+@app.get('/getAnalyticsByFloor')
+async def get_employee_by_id(EmpId: int,date:date):
+    cur.execute(f'SELECT "in_time","out_time","id","emp_id" FROM "{table_name3}" natural join "employee" where "emp_id"={EmpId} and DATE("in_time")=\'{date}\'')
+    data1=cur.fetchall()
+    whrs=datetime(1, 1, 1, 0, 0)
+    # wsum=0
+    temp=[]
+    count=int(1)
+    for row in data1:
+        whrs=datetime(1, 1, 1, 0, 0)
+        intime=row[0].time()
+        outtime=row[1].time()       
+        whrs+=row[1]-row[0]
+        # wsum+=(row[1]-row[0]).total_seconds()
+        ans={ 'Sno':count,'Floor':row[2],'InTime' : intime , 'OutTime' : outtime , 'duration' : whrs.time()}#,duration_sec' : wsum}
+        temp.append(ans) 
+        count+=1
+    return temp
 @app.get('/getAllAnalyticsByFloor')
 async def get_employee_by_id(EmpId: int,date:date, floor: Union[int, None]=None):
     if floor:
